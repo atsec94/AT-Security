@@ -20,8 +20,6 @@ I'm a cybersecurity professional (M.S. Cybersecurity Technology, UMGC) focusing 
 | **Active Directory Attack & Defense** | Segmented AD domain; simulated Kerberoasting & Pass-the-Hash; enforced hardening via GPO | [AD Attack & Defense](./projects/ad-attack-defense/README.md) |
 | **Vulnerability Management** | Baseline scans → patch → rescan; tracked CVEs and false positives | [Vuln Mgmt Lab](./projects/vuln-management/README.md) |
 | **SIEM & Detection Engineering** | Wazuh/Splunk logs; rules for SSH brute force, DNS tunneling, privilege escalation | [SIEM & Detections](./projects/siem-detections/README.md) |
-| **Windows Forensics (DFIR)** | FTK image + Volatility memory triage; IOC timeline & report | [Incident Response/DFIR](./projects/dfir-incident-response/README.md) |
-| **Case Management** | TheHive/Cortex triage workflow; enrichment playbooks | [Case Mgmt Lab](./projects/case-management/README.md) |
 
 > Each project includes: **diagram → build steps → tests → results/metrics → lessons learned**.
 
