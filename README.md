@@ -7,9 +7,9 @@
 
 I'm a cybersecurity professional (M.S. Cybersecurity Technology, UMGC) focusing on **SOC analysis, DFIR, and vulnerability management**. I build homelabs that mirror real-world environments and document everything like a pro engagement—diagrams, methodology, detections, and measurable outcomes.
 
-- 🔭 **Current focus:** AD attack/defense, SIEM detections, vuln management workflows, Windows forensics
-- 🎯 **Target roles:** SOC Analyst (Tier 1/2), DFIR Analyst, Vulnerability Management Analyst, Junior Security Engineer
-- 🧪 **Methodologies:** NIST 800-61 IR lifecycle, MITRE ATT&CK mapping, CIS hardening, CVE/CVSS analysis
+-  **Current focus:** AD attack/defense, SIEM detections, vuln management workflows, Windows forensics
+-  **Target roles:** SOC Analyst (Tier 1/2), DFIR Analyst, Vulnerability Management Analyst, Junior Security Engineer
+-  **Methodologies:** NIST 800-61 IR lifecycle, MITRE ATT&CK mapping, CIS hardening, CVE/CVSS analysis
 
 ---
 
