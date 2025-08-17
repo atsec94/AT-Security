@@ -5,7 +5,7 @@
   <img src="https://img.shields.io/badge/-LinkedIn-0072b1?&style=for-the-badge&logo=linkedin&logoColor=white" />
 </a>
 
-I'm a cybersecurity professional (M.S. Cybersecurity Technology, UMGC) focusing on **SOC analysis, DFIR, and vulnerability management**. I build homelabs that mirror real-world environments and document everything like a pro engagement—diagrams, methodology, detections, and measurable outcomes.
+I'm a cybersecurity professional (M.S. Cybersecurity Technology, UMGC) focusing on **SOC analysis, DFIR, and vulnerability management**. I build homelabs that mirror real-world environments and document everything from diagrams, methodology, detections, and measurable outcomes.
 
 -  **Current focus:** AD attack/defense, SIEM detections, vuln management workflows, Windows forensics
 -  **Target roles:** SOC Analyst (Tier 1/2), DFIR Analyst, Vulnerability Management Analyst, Junior Security Engineer
