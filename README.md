@@ -89,6 +89,7 @@ I'm a cybersecurity professional (M.S. Cybersecurity Technology, UMGC) focusing 
 ---
 
 ## Portfolio / Contact
-- 📄 Resume (PDF): *(add link)*
+- 📄 [Resume (PDF)](https://atsec94.github.io/AT-Security/resume.pdf)
 - 🧰 GitHub Projects: see `/projects`
 - 💬 LinkedIn: <a href="https://linkedin.com/in/austin-tucker-0964aaa8">austin-tucker-0964aaa8</a>
+
