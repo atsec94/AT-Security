@@ -4,7 +4,7 @@
 
 [Brief Introduction - Remove this afterwards]
 
-I am a recent graduate with a profound interest in technology and a dedication to solving complex problems.
+I am a recent graduate of the UMGC Cybersecurity Technology masters program with a profound interest in technology, cybersecurity, solving complex problems.
 
 ## Objective
 [Provide Objective - Remove this afterwards]]
@@ -16,9 +16,9 @@ My journey in computer science has led me to develop a passion for cybersecurity
 
 | Skill                                         | Associated Project         |
 |-----------------------------------------------|----------------------------|
-| SIEM Implementation and Log Analysis          | <a href="https://google.com">Detection Lab</a>|
-| Network Traffic Monitoring and Attack Detection | <a href="https://google.com">Detection Lab</a>|
-| Security Automation with Shuffle SOAR         | SOC Automation Lab|
+| Active Directory Lab | <a href="https://google.com">AD Lab</a>|
+| Vulnerability Scanning & Remediation | <a href="https://google.com">Vulnerability Management Lab</a>|
+| SIEM & Log Monitoring | Log Monitoring Lab |
 | Incident Response Planning and Execution      | SOC Automation Lab|
 | Case Management with TheHive                  | SOC Automation Lab|
 | Scripting and Automation for Threat Mitigation | SOC Automation Lab|
@@ -54,5 +54,5 @@ My journey in computer science has led me to develop a passion for cybersecurity
 </div>
 
 ## Projects
-- Detection Lab
-- SOC Automation Project
+- AD Lab
+- Vulnerability Management and Log Monitoring
