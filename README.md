@@ -83,9 +83,6 @@ I'm a cybersecurity professional (M.S. Cybersecurity Technology, UMGC) focusing 
 - **SIEM & Detections (Wazuh/Splunk)** – rules for brute force, DNS tunneling, privilege escalation  
   → `./projects/siem-detections/`
 
-- **Incident Response / DFIR** – memory + disk analysis with formal report  
-  → `./projects/dfir-incident-response/`
-
 ---
 
 ## Portfolio / Contact
