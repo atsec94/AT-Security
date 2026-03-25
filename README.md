@@ -5,57 +5,33 @@
   <img src="https://img.shields.io/badge/-LinkedIn-0072b1?&style=for-the-badge&logo=linkedin&logoColor=white" />
 </a>
 
-I'm a cybersecurity professional (M.S. Cybersecurity Technology, UMGC) focusing on **SOC analysis, DFIR, and vulnerability management**. I build homelabs that mirror real-world environments and document everything from diagrams, methodology, detections, and measurable outcomes.
+I'm a cybersecurity professional (M.S. Cybersecurity Technology, UMGC) focusing on **SOC analysis, DFIR, and vulnerability management**. I build homelabs that mirror real-world environments and document everything — diagrams, methodology, detections, and measurable outcomes.
 
--  **Current focus:** AD attack/defense, SIEM detections, vuln management workflows, Windows forensics
--  **Target roles:** SOC Analyst (Tier 1/2), DFIR Analyst, Vulnerability Management Analyst, Junior Security Engineer
--  **Methodologies:** NIST 800-61 IR lifecycle, MITRE ATT&CK mapping, CIS hardening, CVE/CVSS analysis
-
----
-
-## Skills ↔ Projects
-
-| Skill Area | What I Built | Proof |
-|---|---|---|
-| **Active Directory Attack & Defense** | Segmented AD domain; simulated Kerberoasting & Pass-the-Hash; enforced hardening via GPO | [AD Attack & Defense](./projects/ad-attack-defense/README.md) |
-| **Vulnerability Management** | Baseline scans → patch → rescan; tracked CVEs and false positives | [Vuln Mgmt Lab](./projects/vuln-management/README.md) |
-| **SIEM & Detection Engineering** | Wazuh/Splunk logs; rules for SSH brute force, DNS tunneling, privilege escalation | [SIEM & Detections](./projects/siem-detections/README.md) |
-
-> Each project includes: **diagram → build steps → tests → results/metrics → lessons learned**.
+- **Current focus:** SIEM deployment & detection engineering, Windows event log analysis, CIS hardening
+- **Target roles:** Help Desk, SOC Analyst (Tier 1/2)
+- **Methodologies:** MITRE ATT&CK mapping, CIS Benchmarks, CVE/CVSS analysis, NIST 800-61 IR lifecycle
 
 ---
 
-## Tools
+## Active Project
 
-### Network
-<div>
-  <img src="https://img.shields.io/badge/-Wireshark-1679A7?&style=for-the-badge&logo=Wireshark&logoColor=white" />
-  <img src="https://img.shields.io/badge/-Suricata-EF3B2D?&style=for-the-badge&logo=Suricata&logoColor=white" />
-  <img src="https://img.shields.io/badge/-Zeek-777BB4?&style=for-the-badge&logo=Zeek&logoColor=white" />
-</div>
+### 🔵 SIEM & Detection Engineering — Wazuh Homelab
+**Status: In Progress**
 
-### Endpoint
-<div>
-  <img src="https://img.shields.io/badge/-Microsoft_Defender_for_Endpoint-00A4EF?&style=for-the-badge&logo=Microsoft&logoColor=white" />
-  <img src="https://img.shields.io/badge/-Velociraptor-4B275F?&style=for-the-badge&logo=Velociraptor&logoColor=white" />
-</div>
+Deployed a Wazuh 4.14.4 SIEM in a segmented VirtualBox environment with a Windows Server 2022 Domain Controller and Windows 11 workstation as monitored endpoints. Established a documented baseline before any hardening or attack simulation.
 
-### SIEM / Logging
-<div>
-  <img src="https://img.shields.io/badge/-Microsoft_Sentinel-0078D4?&style=for-the-badge&logo=Microsoft&logoColor=white" />
-  <img src="https://img.shields.io/badge/-Splunk-000000?&style=for-the-badge&logo=Splunk&logoColor=white" />
-  <img src="https://img.shields.io/badge/-Elastic-005571?&style=for-the-badge&logo=Elastic&logoColor=white" />
-  <img src="https://img.shields.io/badge/-Wazuh-494949?&style=for-the-badge&logoColor=white" />
-</div>
+**What's been built so far:**
+- Wazuh OVA deployed on Amazon Linux 2023 with static IP configuration via `systemd-networkd`
+- Agents deployed on DC01 (Windows Server 2022) and CL1 (Windows 11 Pro)
+- Baseline captured: 22 Critical CVEs, CIS score 27% (99/359 controls passing), 622 medium alerts in first 24 hours
+- MITRE ATT&CK tactics mapped to normal AD operations to establish behavioral baseline
 
-### Offensive / Assessment
-<div>
-  <img src="https://img.shields.io/badge/-Kali_Linux-557C94?style=for-the-badge&logo=kalilinux&logoColor=white" />
-  <img src="https://img.shields.io/badge/-Nmap-4682B4?style=for-the-badge&logoColor=white" />
-  <img src="https://img.shields.io/badge/-OpenVAS-3BB74E?style=for-the-badge&logoColor=white" />
-  <img src="https://img.shields.io/badge/-Nessus-0A96B4?style=for-the-badge&logoColor=white" />
-  <img src="https://img.shields.io/badge/-Metasploit-2A2A2A?style=for-the-badge&logoColor=white" />
-</div>
+**Upcoming:**
+- Brute force simulation from Kali → detection via Event ID 4625 / Wazuh rule 18152
+- Sysmon deployment with SwiftOnSecurity config
+- CIS hardening via GPO with before/after score comparison
+
+→ [Full project documentation](./projects/siem-detections/README.md)
 
 ---
 
@@ -72,21 +48,16 @@ I'm a cybersecurity professional (M.S. Cybersecurity Technology, UMGC) focusing 
 
 ---
 
-## Featured Projects
-
-- **Active Directory Attack & Defense** – hardening & detections  
-  → `./projects/ad-attack-defense/`
-
-- **Vulnerability Management Workflow** – baseline → patch → rescan  
-  → `./projects/vuln-management/`
-
-- **SIEM & Detections (Wazuh/Splunk)** – rules for brute force, DNS tunneling, privilege escalation  
-  → `./projects/siem-detections/`
+## Tools In Use (This Lab)
+<div>
+  <img src="https://img.shields.io/badge/-Wazuh-494949?&style=for-the-badge&logoColor=white" />
+  <img src="https://img.shields.io/badge/-Kali_Linux-557C94?style=for-the-badge&logo=kalilinux&logoColor=white" />
+  <img src="https://img.shields.io/badge/-VirtualBox-183A61?style=for-the-badge&logo=virtualbox&logoColor=white" />
+  <img src="https://img.shields.io/badge/-Windows_Server_2022-0078D4?style=for-the-badge&logo=windows&logoColor=white" />
+</div>
 
 ---
 
-## Portfolio / Contact
-- 📄 [Resume (PDF)](https://atsec94.github.io/AT-Security/resume.pdf)
-- 🧰 GitHub Projects: see `/projects`
+## Contact
 - 💬 LinkedIn: <a href="https://linkedin.com/in/austin-tucker-0964aaa8">austin-tucker-0964aaa8</a>
-
+- 🧰 Projects: see `/projects` folder above
