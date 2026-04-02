@@ -15,7 +15,7 @@ I'm a cybersecurity professional (M.S. Cybersecurity Technology, UMGC) focusing 
 
 ## Active Project
 
-### 🔵 SIEM & Detection Engineering — Wazuh Homelab
+### SIEM & Detection Engineering — Wazuh Homelab
 **Status: In Progress**
 
 Deployed a Wazuh 4.14.4 SIEM in a segmented VirtualBox environment with a Windows Server 2022 Domain Controller and Windows 11 workstation as monitored endpoints. Established a documented baseline before any hardening or attack simulation.
