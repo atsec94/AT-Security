@@ -70,7 +70,7 @@ EXIT;
 
 **Screenshot — Database creation confirmed:**
 
-![Database Creation](screenshots/osTicketDatabaseCreation.png)
+![Database Creation](../screenshots/osTicketDatabaseCreation.png)
 
 ### 5. Web Installer
 Navigated to `http://192.168.56.30/osticket/setup/` and completed installation with:
@@ -80,7 +80,7 @@ Navigated to `http://192.168.56.30/osticket/setup/` and completed installation w
 
 **Screenshot — Successful installation:**
 
-![osTicket Installation Complete](screenshots/osTicketInstall.png)
+![osTicket Installation Complete](../screenshots/osTicketInstall.png)
 
 ### 6. Post-Install Hardening
 ```bash
@@ -93,13 +93,13 @@ sudo rm -rf /var/www/html/osticket/setup
 
 **Screenshot — Config locked and setup directory removed:**
 
-![Post-Install Hardening](screenshots/SecureConfFile.png)
+![Post-Install Hardening](../screenshots/SecureConfFile.png)
 
 ## Verification
 
 **Screenshot — Admin Control Panel accessible:**
 
-![osTicket Admin Panel](screenshots/osTicketFirstLogon.png)
+![osTicket Admin Panel](../screenshots/osTicketFirstLogon.png)
 
 - All PHP prerequisites passed (green) in osTicket web installer
 - Admin Control Panel accessible at `http://192.168.56.30/osticket/scp/`
