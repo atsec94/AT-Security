@@ -2,7 +2,7 @@
 
 ## Objective
 
-Deploy a functional SIEM (Wazuh) in a segmented homelab environment, onboard Windows endpoints as monitored agents, establish a verified baseline, and document real alert findings. This project demonstrates the ability to deploy, configure, and operate a SIEM — a core skill for SOC Analyst and Help Desk roles.
+Deploy a functional SIEM (Wazuh) in a segmented homelab environment, onboard Windows endpoints as monitored agents, establish a verified baseline, simulate attacks, document detections, and integrate a help desk ticketing system. This project demonstrates end-to-end SOC workflow — from infrastructure deployment through detection, investigation, and ticket-driven response.
 
 ---
 
@@ -14,6 +14,7 @@ Deploy a functional SIEM (Wazuh) in a segmented homelab environment, onboard Win
 |   Windows Server 2022     |       |   Windows 11 Pro          |
 |   Domain Controller       |       |   Domain: LAB.local       |
 |   Wazuh Agent v4.14.4     |       |   Wazuh Agent v4.14.4     |
+|   Sysmon                  |       |   Sysmon                  |
 +------------+--------------+       +------------+--------------+
              |                                   |
              +---------------+-------------------+
@@ -25,11 +26,13 @@ Deploy a functional SIEM (Wazuh) in a segmented homelab environment, onboard Win
                   |  Wazuh v4.14.4 OVA  |
                   +----------+----------+
                              |
-                  +----------+----------+
-                  |  KALI (192.168.56.50)|
-                  |  Attacker Machine   |
-                  |  Debian/Kali Linux  |
-                  +---------------------+
+             +---------------+-------------------+
+             |                                   |
++------------+--------------+       +-----------+---------------+
+|  KALI (192.168.56.50)     |       |  osTicket (192.168.56.30) |
+|  Attacker Machine         |       |  Ubuntu 24.04             |
+|  Debian/Kali Linux        |       |  Help Desk Ticketing      |
++---------------------------+       +---------------------------+
 
 Network: VirtualBox Host-Only (192.168.56.0/24)
 Hypervisor: Oracle VirtualBox
@@ -45,6 +48,25 @@ Hypervisor: Oracle VirtualBox
 | CL1 | 192.168.56.11 | Windows 11 Pro | Domain-joined workstation |
 | Wazuh | 192.168.56.20 | Amazon Linux 2023 | SIEM / Log aggregation |
 | KALI | 192.168.56.50 | Debian/Kali Linux | Attacker (isolated) |
+| osTicket | 192.168.56.30 | Ubuntu 24.04 LTS | Help desk ticketing |
+
+---
+
+## Project Status
+
+| Phase | Description | Status |
+|---|---|---|
+| 1 | Wazuh SIEM deployment | ✅ Complete |
+| 2 | Agent deployment (DC01 + CL1) | ✅ Complete |
+| 3 | Baseline documentation | ✅ Complete |
+| 4 | Sysmon deployment | ✅ Complete |
+| 5 | SMB brute force simulation & detection | ✅ Complete |
+| 6 | Account lockout policy implementation | ✅ Complete |
+| 7 | osTicket help desk deployment | ✅ Complete |
+| 8 | Wazuh agent on osTicket VM | 🔲 Up Next |
+| 9 | Wazuh → osTicket alert integration | 🔲 Planned |
+| 10 | Simulated help desk ticket workflows | 🔲 Planned |
+| 11 | CIS hardening via GPO (before/after) | 🔲 Planned |
 
 ---
 
@@ -79,6 +101,37 @@ NET START WazuhSvc
 
 ### Phase 3 — Baseline Documentation
 Immediately after agent deployment, documented the following baseline state across both endpoints before any hardening or attack simulation.
+
+### Phase 4 — Sysmon Deployment
+- Deployed Sysmon with SwiftOnSecurity config on both DC01 and CL1
+- Sysmon provides enhanced process creation, network connection, and file event logging beyond default Windows event logs
+- Verified Sysmon events flowing into Wazuh dashboard
+
+![DC01 Sysmon Running](screenshots/DC01SysmonRunning.png)
+![CL1 Sysmon Running](screenshots/CL1SysmonRunning.png)
+
+### Phase 5 — SMB Brute Force Simulation & Detection
+- Executed SMB brute force attack from Kali (192.168.56.50) targeting DC01 (192.168.56.10) using Metasploit `smb_login` module
+- Attack generated repeated Event ID 4625 (failed logon) entries on DC01
+- Wazuh rule 18152 triggered and alerted successfully
+- Full analyst workflow documented in Finding 001
+
+→ [Finding 001 — SMB Brute Force Detection](findings/finding-001-smb-brute-force.md)
+
+### Phase 6 — Account Lockout Policy
+- Implemented account lockout GPO on DC01 to automatically lock accounts after repeated failed logons
+- Policy verified via forced lockout test and confirmed in Active Directory Users and Computers
+- Provides automated defense against brute force attacks detected in Phase 5
+
+→ [Finding 002 — Account Lockout Policy](findings/finding-002-account-lockout-policy.md)
+
+### Phase 7 — osTicket Help Desk Deployment
+- Provisioned Ubuntu 24.04 VM with static IP 192.168.56.30
+- Deployed full LAMP stack: Apache 2.4, MySQL 8.0.45, PHP 8.3.6 with all required extensions
+- Installed osTicket v1.18.1 and completed web installer
+- Post-install hardening: setup directory removed, config file locked to read-only (0644), dedicated least-privilege MySQL user
+
+→ [Finding 003 — osTicket Deployment](findings/finding-003-osticket-deployment.md)
 
 ---
 
@@ -117,7 +170,7 @@ These findings reflect unpatched evaluation builds on both endpoints. Baseline i
 |---|---|---|---|
 | CIS Microsoft Windows Server 2022 Benchmark v2.0.0 | 99 | 260 | **27%** |
 
-A 27% CIS compliance score reflects a default, unconfigured domain controller. This is the expected baseline for a freshly promoted DC with no hardening applied. Target: improve score through GPO hardening (documented in AD Attack & Defense project).
+A 27% CIS compliance score reflects a default, unconfigured domain controller. This is the expected baseline for a freshly promoted DC with no hardening applied. Target: improve score through GPO hardening.
 
 ### MITRE ATT&CK — Top Tactics (First 24 Hours, DC01)
 | Tactic | Alert Count |
@@ -127,7 +180,7 @@ A 27% CIS compliance score reflects a default, unconfigured domain controller. T
 | Privilege Escalation | 71 |
 | Initial Access | 70 |
 
-**Analyst note:** These alerts reflect normal AD operations mapped to ATT&CK techniques — not active attacks. Event sources include logon/logoff events, scheduled tasks, and service operations. Establishing this baseline is critical for distinguishing normal from anomalous behavior in subsequent detection exercises.
+**Analyst note:** These alerts reflect normal AD operations mapped to ATT&CK techniques — not active attacks. Establishing this baseline is critical for distinguishing normal from anomalous behavior in subsequent detection exercises.
 
 ### Alert Summary (First 24 Hours — Both Agents)
 | Severity | Count |
@@ -141,6 +194,16 @@ A 27% CIS compliance score reflects a default, unconfigured domain controller. T
 
 ---
 
+## Findings Index
+
+| Finding | Title | Status |
+|---|---|---|
+| [001](findings/finding-001-smb-brute-force.md) | SMB Brute Force Detection | ✅ Complete |
+| [002](findings/finding-002-account-lockout-policy.md) | Account Lockout Policy Implementation | ✅ Complete |
+| [003](findings/finding-003-osticket-deployment.md) | osTicket Help Desk Deployment | ✅ Complete |
+
+---
+
 ## Connectivity Verification
 
 ![Wazuh to DC01](screenshots/WazuhToDC.png)
@@ -150,19 +213,20 @@ A 27% CIS compliance score reflects a default, unconfigured domain controller. T
 
 ## Lessons Learned
 
-- **Amazon Linux 2023 networking:** AL2023 does not use netplan (Ubuntu) or persist traditional `ifcfg` scripts via the `network` service at boot. Static IP configuration requires `systemd-networkd` with a `.network` file in `/etc/systemd/network/`. This is a common gotcha with the Wazuh OVA.
+- **Amazon Linux 2023 networking:** AL2023 does not use netplan (Ubuntu) or persist traditional `ifcfg` scripts via the `network` service at boot. Static IP configuration requires `systemd-networkd` with a `.network` file in `/etc/systemd/network/`.
 - **Temporary internet access for agent install:** When endpoints have no internet access (host-only network), the cleanest approach is temporarily attaching a NAT adapter, installing the agent, then removing the adapter. Adapter removal must be verified post-install — leaving internet access on a DC is a security risk.
 - **Baseline before hardening:** Capturing CIS score, vulnerability count, and MITRE alert baseline before making any changes creates measurable proof of improvement — a critical element of any professional security engagement.
-- **Document scope clearly:** Initial baseline captured DC01 only. Full baseline updated once CL1 agent was confirmed active. Always note which endpoints are included in aggregate findings.
+- **Apache PHP module:** On Ubuntu 24.04, PHP is not automatically linked to Apache after installation. `libapache2-mod-php8.3` and `a2enmod php8.3` must be explicitly run or Apache will serve raw PHP code instead of executing it.
+- **Post-install hardening matters:** Leaving the osTicket `/setup/` directory accessible after installation allows unauthenticated reinstallation — removing it immediately is a mandatory security step.
 
 ---
 
 ## Next Steps
 
-- [ ] Simulate brute force attack from Kali, detect via Event ID 4625 / Wazuh rule 18152
-- [ ] Install Sysmon on DC01 and CL1 with SwiftOnSecurity config
-- [ ] Document first alert investigation with full analyst workflow
-- [ ] Begin CIS hardening via GPO, rescan to show score improvement
+- [ ] Deploy Wazuh agent on osTicket VM (192.168.56.30)
+- [ ] Integrate Wazuh alerts with osTicket to auto-generate tickets from SIEM detections
+- [ ] Simulate help desk workflows — password resets, account lockouts, malware alerts
+- [ ] CIS hardening via GPO with before/after score comparison
 - [ ] Patch critical CVEs, rescan to show vulnerability reduction
 
 ---
@@ -182,3 +246,9 @@ A 27% CIS compliance score reflects a default, unconfigured domain controller. T
 | `WazuhVulnOverview.png` | Combined vulnerability overview — DC01 + CL1 |
 | `WazuhToDC.png` | Connectivity verification Wazuh → DC01 |
 | `WazuhToCL1.png` | Connectivity verification Wazuh → CL1 |
+| `DC01SysmonRunning.png` | Sysmon service confirmed running on DC01 |
+| `CL1SysmonRunning.png` | Sysmon service confirmed running on CL1 |
+| `osTicketDatabaseCreation.png` | MySQL database and user creation for osTicket |
+| `osTicketInstall.png` | osTicket web installer success screen |
+| `SecureConfFile.png` | Post-install config lockdown and setup removal |
+| `osTicketFirstLogon.png` | Admin Control Panel confirmed accessible |
