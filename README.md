@@ -27,22 +27,24 @@ A fully segmented VirtualBox homelab simulating a small enterprise environment w
 | CL1 | 192.168.56.11 | Windows 11 Pro | Domain Workstation |
 | Wazuh | 192.168.56.20 | Amazon Linux 2023 | SIEM |
 | Kali | 192.168.56.50 | Kali Linux | Attacker |
-| osTicket | 192.168.56.30 | Ubuntu 24.04 | Help Desk Ticketing |
+| osTicket | 192.168.56.30 | Ubuntu 24.04 | Help Desk Ticketing + Wazuh Agent |
 
 **Completed:**
-- ✅ Wazuh 4.14.4 SIEM deployed with agents on DC01 and CL1
-- ✅ Sysmon deployed on both endpoints with SwiftOnSecurity config
+- ✅ Wazuh 4.14.4 SIEM deployed with agents on DC01, CL1, and osTicket VM
+- ✅ Sysmon deployed on both Windows endpoints with SwiftOnSecurity config
 - ✅ Baseline captured: 22 Critical CVEs, CIS score 27%, 622 medium alerts in first 24 hours
 - ✅ MITRE ATT&CK tactics mapped to normal AD operations
 - ✅ Finding 001 — SMB brute force attack simulated and detected (Event ID 4625 / Wazuh rule 18152)
 - ✅ Finding 002 — Account lockout policy implemented and verified via GPO
 - ✅ Finding 003 — osTicket v1.18.1 deployed on Ubuntu 24.04 (LAMP stack, post-install hardening applied)
+- ✅ Finding 004 — Wazuh agent deployed on osTicket VM — full lab SIEM coverage achieved
+- ✅ Finding 005 — Wazuh → osTicket REST API integration — SIEM alerts auto-generate help desk tickets
 
 **Up Next:**
-- [ ] Deploy Wazuh agent on osTicket VM for full lab SIEM coverage
-- [ ] Integrate Wazuh alerts with osTicket to auto-generate tickets from SIEM detections
-- [ ] Simulate help desk workflows — password resets, account lockouts, malware alerts
+- [ ] Trigger real Wazuh alert with DC01 and CL1 running — confirm end-to-end auto-ticket generation
+- [ ] Simulate help desk workflows — account lockout response, malware alert triage
 - [ ] CIS hardening via GPO with before/after score comparison
+- [ ] Patch critical CVEs, rescan to show vulnerability reduction
 
 → [Full project documentation](./projects/siem-detections/README.md)
 
@@ -70,6 +72,7 @@ A fully segmented VirtualBox homelab simulating a small enterprise environment w
   <img src="https://img.shields.io/badge/-Windows_Server_2022-0078D4?style=for-the-badge&logo=windows&logoColor=white" />
   <img src="https://img.shields.io/badge/-Ubuntu-E95420?style=for-the-badge&logo=ubuntu&logoColor=white" />
   <img src="https://img.shields.io/badge/-Sysmon-4D4D4D?style=for-the-badge&logoColor=white" />
+  <img src="https://img.shields.io/badge/-Python-3776AB?style=for-the-badge&logo=python&logoColor=white" />
 </div>
 
 ---
