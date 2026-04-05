@@ -31,7 +31,8 @@ Deploy a functional SIEM (Wazuh) in a segmented homelab environment, onboard Win
 +------------+--------------+       +-----------+---------------+
 |  KALI (192.168.56.50)     |       |  osTicket (192.168.56.30) |
 |  Attacker Machine         |       |  Ubuntu 24.04             |
-|  Debian/Kali Linux        |       |  Help Desk Ticketing      |
+|  Debian/Kali Linux        |       |  Wazuh Agent v4.14.4      |
+|                           |       |  Help Desk Ticketing      |
 +---------------------------+       +---------------------------+
 
 Network: VirtualBox Host-Only (192.168.56.0/24)
@@ -48,7 +49,7 @@ Hypervisor: Oracle VirtualBox
 | CL1 | 192.168.56.11 | Windows 11 Pro | Domain-joined workstation |
 | Wazuh | 192.168.56.20 | Amazon Linux 2023 | SIEM / Log aggregation |
 | KALI | 192.168.56.50 | Debian/Kali Linux | Attacker (isolated) |
-| osTicket | 192.168.56.30 | Ubuntu 24.04 LTS | Help desk ticketing |
+| osTicket | 192.168.56.30 | Ubuntu 24.04 LTS | Help desk ticketing + Wazuh agent |
 
 ---
 
@@ -63,9 +64,9 @@ Hypervisor: Oracle VirtualBox
 | 5 | SMB brute force simulation & detection | ✅ Complete |
 | 6 | Account lockout policy implementation | ✅ Complete |
 | 7 | osTicket help desk deployment | ✅ Complete |
-| 8 | Wazuh agent on osTicket VM | 🔲 Up Next |
-| 9 | Wazuh → osTicket alert integration | 🔲 Planned |
-| 10 | Simulated help desk ticket workflows | 🔲 Planned |
+| 8 | Wazuh agent on osTicket VM | ✅ Complete |
+| 9 | Wazuh → osTicket alert integration | ✅ Complete |
+| 10 | Simulated help desk ticket workflows | 🔲 Up Next |
 | 11 | CIS hardening via GPO (before/after) | 🔲 Planned |
 
 ---
@@ -132,6 +133,30 @@ Immediately after agent deployment, documented the following baseline state acro
 - Post-install hardening: setup directory removed, config file locked to read-only (0644), dedicated least-privilege MySQL user
 
 → [Finding 003 — osTicket Deployment](findings/finding-003-osticket-deployment.md)
+
+### Phase 8 — Wazuh Agent on osTicket VM
+- Imported Wazuh GPG key and added official apt repository on Ubuntu 24.04
+- Installed wazuh-agent 4.14.4, pre-configured to register with Wazuh server at 192.168.56.20
+- Agent confirmed active in Wazuh Endpoints dashboard as Agent 003
+- Full lab now has SIEM coverage across all VMs — no blind spots
+
+![osTicket Agent Active](screenshots/WazuhOsTicketIntegration.png)
+![osTicket in Wazuh Dashboard](screenshots/osTicketAddedToDash.png)
+
+→ [Finding 004 — Wazuh Agent on osTicket VM](findings/finding-004-wazuh-agent-osticket.md)
+
+### Phase 9 — Wazuh → osTicket Alert Integration
+- Generated osTicket API key scoped to Wazuh server IP (192.168.56.20)
+- Created dedicated `Wazuh SIEM` user in osTicket for ticket submission
+- Developed Python integration script at `/var/ossec/integrations/custom-osticket.py`
+- Script parses Wazuh alert JSON and posts ticket to osTicket REST API
+- Configured Wazuh `ossec.conf` to trigger script on all level 7+ alerts
+- Tested end-to-end: alert JSON → Python script → osTicket API → ticket #290138 confirmed
+
+![Integration Test](screenshots/JsonTest.png)
+![Ticket in osTicket](screenshots/TicketTestTriggerLevel.png)
+
+→ [Finding 005 — Wazuh → osTicket Integration](findings/finding-005-wazuh-osticket-integration.md)
 
 ---
 
@@ -201,6 +226,8 @@ A 27% CIS compliance score reflects a default, unconfigured domain controller. T
 | [001](findings/finding-001-smb-brute-force.md) | SMB Brute Force Detection | ✅ Complete |
 | [002](findings/finding-002-account-lockout-policy.md) | Account Lockout Policy Implementation | ✅ Complete |
 | [003](findings/finding-003-osticket-deployment.md) | osTicket Help Desk Deployment | ✅ Complete |
+| [004](findings/finding-004-wazuh-agent-osticket.md) | Wazuh Agent on osTicket VM | ✅ Complete |
+| [005](findings/finding-005-wazuh-osticket-integration.md) | Wazuh → osTicket Alert Integration | ✅ Complete |
 
 ---
 
@@ -218,14 +245,17 @@ A 27% CIS compliance score reflects a default, unconfigured domain controller. T
 - **Baseline before hardening:** Capturing CIS score, vulnerability count, and MITRE alert baseline before making any changes creates measurable proof of improvement — a critical element of any professional security engagement.
 - **Apache PHP module:** On Ubuntu 24.04, PHP is not automatically linked to Apache after installation. `libapache2-mod-php8.3` and `a2enmod php8.3` must be explicitly run or Apache will serve raw PHP code instead of executing it.
 - **Post-install hardening matters:** Leaving the osTicket `/setup/` directory accessible after installation allows unauthenticated reinstallation — removing it immediately is a mandatory security step.
+- **osTicket API endpoint:** osTicket v1.18 uses `/api/http.php/tickets.json` not `/api/tickets.json`. Always verify API endpoints against the installed version.
+- **osTicket email validation:** osTicket rejects `.local` TLD email addresses as invalid. Use standard TLD addresses for API users and system accounts.
+- **SCP for file transfers:** When copy-paste is unavailable between host and VM, SCP from the Windows host is the most reliable way to transfer scripts and config files without manual typing errors.
 
 ---
 
 ## Next Steps
 
-- [ ] Deploy Wazuh agent on osTicket VM (192.168.56.30)
-- [ ] Integrate Wazuh alerts with osTicket to auto-generate tickets from SIEM detections
-- [ ] Simulate help desk workflows — password resets, account lockouts, malware alerts
+- [ ] Start DC01 and CL1, trigger a real Wazuh alert, confirm auto-ticket generation end-to-end
+- [ ] Simulate help desk workflows — account lockout response, malware alert triage
+- [ ] Document full ticket lifecycle as Finding 006
 - [ ] CIS hardening via GPO with before/after score comparison
 - [ ] Patch critical CVEs, rescan to show vulnerability reduction
 
@@ -252,3 +282,7 @@ A 27% CIS compliance score reflects a default, unconfigured domain controller. T
 | `osTicketInstall.png` | osTicket web installer success screen |
 | `SecureConfFile.png` | Post-install config lockdown and setup removal |
 | `osTicketFirstLogon.png` | Admin Control Panel confirmed accessible |
+| `WazuhOsTicketIntegration.png` | Wazuh agent active on osTicket VM |
+| `osTicketAddedToDash.png` | osTicket VM confirmed in Wazuh Endpoints dashboard |
+| `JsonTest.png` | Python integration script test successful |
+| `TicketTestTriggerLevel.png` | Wazuh alert ticket confirmed in osTicket dashboard |
